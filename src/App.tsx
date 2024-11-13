@@ -58,7 +58,17 @@ function App() {
           </div>
         </div>
       </div>
-      <RaidTimer lastRaid={lastRaid} />
+      <div className="fixed bottom-0 left-0 right-0">
+        <RaidTimer lastRaid={lastRaid} />
+      </div>
+      <footer className="text-center mt-8">
+        <p className="text-sm text-gray-400">
+          Made with ❤️ by{" "}
+          <a href="https://github.com/portcakes" className="text-blue-400">
+            Cayla, the portcakess
+          </a>
+        </p>
+      </footer>
       <Analytics />
     </div>
   );
