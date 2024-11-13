@@ -3,6 +3,7 @@ import { TaskButton } from "./components/TaskButton";
 import { BuildingCard } from "./components/BuildingCard";
 import { useGame } from "./hooks/useGame";
 import { Analytics } from "@vercel/analytics/react";
+import { RaidTimer } from "./components/RaidTimer";
 
 function App() {
   const {
@@ -12,6 +13,7 @@ function App() {
     handleTask,
     upgradeBuilding,
     canAffordUpgrade,
+    lastRaid,
   } = useGame();
 
   return (
@@ -56,6 +58,7 @@ function App() {
           </div>
         </div>
       </div>
+      <RaidTimer lastRaid={lastRaid} />
       <Analytics />
     </div>
   );

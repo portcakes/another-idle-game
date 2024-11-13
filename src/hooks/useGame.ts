@@ -198,5 +198,6 @@ export const useGame = () => {
     handleTask,
     upgradeBuilding,
     canAffordUpgrade,
+    lastRaid,
   };
 };
