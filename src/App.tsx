@@ -17,7 +17,9 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white p-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-8">Kingdom Builder</h1>
+        <h1 className="text-4xl font-bold text-center mb-8">
+          Another Idle Game
+        </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           {resources.map((resource) => (
