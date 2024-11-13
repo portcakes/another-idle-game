@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Resource, Building, Task } from '../types/game';
 
+const STORAGE_KEY = 'kingdom-builder-save';
+
 const INITIAL_RESOURCES: Resource[] = [
   { name: 'food', amount: 10, perClick: 1, perSecond: 0, depletionRate: 0.5, lastDepleted: Date.now() },
   { name: 'wood', amount: 10, perClick: 1, perSecond: 0, depletionRate: 0.3, lastDepleted: Date.now() },
@@ -47,11 +49,60 @@ const TASKS: Task[] = [
   { id: '4', name: 'Smelt Metal', resource: 'metal', baseOutput: 1, difficulty: 3, icon: 'Hammer' },
 ];
 
+interface GameState {
+  resources: Resource[];
+  buildings: Building[];
+  lastRaid: number;
+}
+
+const loadGameState = (): GameState | null => {
+  try {
+    const savedState = localStorage.getItem(STORAGE_KEY);
+    if (savedState) {
+      const parsedState = JSON.parse(savedState);
+      return {
+        ...parsedState,
+        resources: parsedState.resources.map((r: Resource) => ({
+          ...r,
+          lastDepleted: Date.now(),
+        })),
+        buildings: parsedState.buildings.map((b: Building) => ({
+          ...b,
+          lastProduced: Date.now(),
+          productionProgress: 0,
+        })),
+      };
+    }
+  } catch (error) {
+    console.error('Error loading game state:', error);
+  }
+  return null;
+};
+
+const saveGameState = (state: GameState) => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (error) {
+    console.error('Error saving game state:', error);
+  }
+};
+
 export const useGame = () => {
-  const [resources, setResources] = useState<Resource[]>(INITIAL_RESOURCES);
-  const [buildings, setBuildings] = useState<Building[]>(INITIAL_BUILDINGS);
+  const savedState = loadGameState();
+  const [resources, setResources] = useState<Resource[]>(savedState?.resources || INITIAL_RESOURCES);
+  const [buildings, setBuildings] = useState<Building[]>(savedState?.buildings || INITIAL_BUILDINGS);
   const [availableTasks, setAvailableTasks] = useState<Task[]>(TASKS.slice(0, 3));
-  const [lastRaid, setLastRaid] = useState(Date.now());
+  const [lastRaid, setLastRaid] = useState(savedState?.lastRaid || Date.now());
+
+  // Save game state whenever it changes
+  useEffect(() => {
+    const gameState: GameState = {
+      resources,
+      buildings,
+      lastRaid,
+    };
+    saveGameState(gameState);
+  }, [resources, buildings, lastRaid]);
 
   const getResource = useCallback((name: string) => {
     return resources.find(r => r.name === name)!;

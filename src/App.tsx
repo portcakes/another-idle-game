@@ -4,7 +4,7 @@ import { BuildingCard } from "./components/BuildingCard";
 import { useGame } from "./hooks/useGame";
 import { Analytics } from "@vercel/analytics/react";
 import { RaidTimer } from "./components/RaidTimer";
-
+import { Trash2 } from "lucide-react";
 function App() {
   const {
     resources,
@@ -16,13 +16,30 @@ function App() {
     lastRaid,
   } = useGame();
 
+  const handleResetGame = () => {
+    if (
+      window.confirm(
+        "Are you sure you want to reset your progress? This cannot be undone."
+      )
+    ) {
+      localStorage.removeItem("kingdom-builder-save");
+      window.location.reload();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white p-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-8">
-          Another Idle Game
-        </h1>
-
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-bold">Another Idle Game</h1>
+          <button
+            onClick={handleResetGame}
+            className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg transition-colors"
+          >
+            <Trash2 className="w-4 h-4" />
+            Reset Progress
+          </button>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           {resources.map((resource) => (
             <ResourceDisplay key={resource.name} resource={resource} />
