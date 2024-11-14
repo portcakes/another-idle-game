@@ -1,6 +1,6 @@
-import React from 'react';
-import { Task } from '../types/game';
-import * as Icons from 'lucide-react';
+import React from "react";
+import { Task } from "../types/game";
+import * as Icons from "lucide-react";
 
 interface TaskButtonProps {
   task: Task;
@@ -8,7 +8,9 @@ interface TaskButtonProps {
 }
 
 export const TaskButton: React.FC<TaskButtonProps> = ({ task, onClick }) => {
-  const IconComponent = Icons[task.icon as keyof typeof Icons];
+  const IconComponent = Icons[
+    task.icon as keyof typeof Icons
+  ] as React.ElementType;
 
   return (
     <button
